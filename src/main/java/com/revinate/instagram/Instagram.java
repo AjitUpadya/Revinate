@@ -15,7 +15,9 @@ import java.util.List;
 
 public class Instagram {
 
+	// map with key: userId and value: User object
 	Map<Integer, User> map;
+	// list of posts with insertion order maintained
 	List<Post> posts; 
 	
     /** Initialize your data structure here. */
@@ -41,7 +43,6 @@ public class Instagram {
     		return Collections.emptyList();
     	List<Integer> res = new ArrayList<Integer>();
     	List<Integer> followsList = map.get(userId).getFollows();
-    	Iterator<Post> iter = posts.iterator();
     	int j = 0;
     	for(int i = posts.size()-1; i >= 0; i--) {
     		Post post = posts.get(i);
@@ -51,7 +52,6 @@ public class Instagram {
     				break;
     		}
     	}
-    	//Collections.reverse(res);
     	return res;
     }
 
@@ -59,6 +59,8 @@ public class Instagram {
     public void follow(int followerId, int followedId) {
     	if(!map.containsKey(followerId))
     		return;
+    	
+    	// creates the user object of the followed user id if it does not exist
     	if(!map.containsKey(followedId)) {
     		User user = new User();
     		map.put(followedId, user);
@@ -74,11 +76,11 @@ public class Instagram {
 
     /** A Follower unfollows a followed. Nothing happens if invalid */
     public void unfollow(int followerId, int followedId) {
+    	// if the follower or the followed user id is invalid, then exit
     	if(!map.containsKey(followerId) || !map.containsKey(followedId))
     		return;
     	List<Integer> followers = map.get(followerId).getFollows();
     	if(followers != null) {
-    		//followers.remove(followerId);
     		Iterator<Integer> iter = followers.iterator();
     		while(iter.hasNext()) {
     			if(iter.next() == followedId) {
@@ -88,45 +90,12 @@ public class Instagram {
     		}
     	}
     }
-    /*public static void main(String[] args) {
-    	Instagram instagram = new Instagram();
-    	
-    	// User 1 posts a new media (id = 5).
-    	instagram.postMedia(1, 5);
-    	//instagram.postMedia(1, 4);
-
-    	// User 1's media feed should return a list with 1 media id -> [5].
-    	List<Integer> feed = instagram.getMediaFeed(1);
-    	for(Integer f: feed) {
-    		System.out.println(f);
-    	}
-
-    	// User 1 follows user 2.
-    	instagram.follow(1, 2);
-
-    	// User 2 posts a new media (id = 3).
-    	instagram.postMedia(2, 3);
-
-    	// User 1's media feed should return a list with 2 media ids -> [3, 5].
-    	// Media id 3 should precede media id 5 because it is posted after media id 5.
-    	feed = instagram.getMediaFeed(1);
-    	for(Integer f: feed) {
-    		System.out.println(f);
-    	}
-
-    	// User 1 unfollows user 2.
-    	instagram.unfollow(1, 2);
-
-    	System.out.println();
-    	// User 1's media feed should return a list with 1 media id -> [5],
-    	// since user 1 is no longer following user 2.
-    	feed = instagram.getMediaFeed(1);
-    	for(Integer f: feed) {
-    		System.out.println(f);
-    	}
-    } */
 }
 
+/**
+ * @author ajit
+ * User class to keep track of the list of other users that are being followed
+ */
 class User {
 	
 	List<Integer> follows;
@@ -146,6 +115,10 @@ class User {
 	}
 }
 
+/**
+ * @author ajit
+ * A simple POJO to hold the posts made by users
+ */
 class Post {
 	
 	int userId;
